@@ -41,9 +41,7 @@ exports.select = (...properties) => function select(collection) {
             const obj = {};
             properties
                 .filter(prop => item.hasOwnProperty(prop))
-                .forEach(prop => {
-                    obj[prop] = item[prop];
-                });
+                .forEach(prop => (obj[prop] = item[prop]));
 
             return obj;
         }
@@ -71,7 +69,7 @@ exports.filterIn = (property, values) => function filterIn(collection) {
 exports.sortBy = (property, order) => function sortBy(collection) {
     const orderSignum = { asc: 1, desc: -1 }[order];
 
-    return [...collection].sort(
+    return collection.slice(0).sort(
         (item1, item2) => {
             let [prop1, prop2] = [item1[property], item2[property]];
             if (prop1 === prop2) {
@@ -92,8 +90,7 @@ exports.sortBy = (property, order) => function sortBy(collection) {
 exports.format = (property, formatter) => function format(collection) {
     return collection.map(
         item => {
-            let obj = {};
-            Object.assign(obj, item);
+            let obj = Object.assign({}, item);
             obj[property] = formatter(obj[property]);
 
             return obj;
